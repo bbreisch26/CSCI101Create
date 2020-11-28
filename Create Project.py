@@ -14,8 +14,9 @@ class Gui(QWidget):
         # Define variables
         self.flashcard = QPushButton(self)
 
-        self.lbl = QLabel("fuck", self.flashcard)
+        self.lbl = QLabel("", self.flashcard)
         self.lbl.setWordWrap(True)
+        self.lbl.setAlignment(QtCore.Qt.AlignCenter)
 
         self.left = QPushButton("<", self)
         self.right = QPushButton(">", self)
@@ -35,6 +36,8 @@ class Gui(QWidget):
         self.flashcard.setFixedSize(200, 200)
         self.flashcard.move(100, 100)
         self.flashcard.clicked.connect(self.flip)
+        self.lbl.move(5,0)
+        self.lbl.setFixedSize(190,200)
         # Set size and pos of left button
         self.left.setFixedSize(50,50)
         self.left.move(150, 300)
@@ -51,11 +54,13 @@ class Gui(QWidget):
         self.show()
 
     def flip(self):
-        print(self.flashcard.text())
-        if self.flashcard.text() == self.words[self.onword]:
-            self.flashcard.setText(self.definitions[self.onword])
+        if self.lbl.text() == "":
+            return
+
+        if self.lbl.text() == self.words[self.onword]:
+            self.lbl.setText(self.definitions[self.onword])
         else:
-            self.flashcard.setText(self.words[self.onword])
+            self.lbl.setText(self.words[self.onword])
 
 
     def getfile(self):
@@ -72,17 +77,21 @@ class Gui(QWidget):
 
         self.left.clicked.connect(self.moveleft)
         self.right.clicked.connect(self.moveright)
-        self.flashcard.setText(self.words[self.onword])
+        self.lbl.setText(self.words[self.onword])
 
     def moveleft(self):
         if self.onword >= 1:
             self.onword -= 1
-        self.flashcard.setText(self.words[self.onword])
+        else:
+            self.onword = len(self.words)-1
+        self.lbl.setText(self.words[self.onword])
 
     def moveright(self):
         if self.onword < len(self.words) - 1:
             self.onword += 1
-        self.flashcard.setText(self.words[self.onword])
+        else:
+            self.onword = 0
+        self.lbl.setText(self.words[self.onword])
 
 
 def main():
